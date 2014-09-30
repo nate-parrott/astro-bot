@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+	<script>
+	$(document).ready(function() {
+		$("#form").submit(function() {
+			$("<li></li>").text($("#form input[name=query]").val()).addClass("sent").appendTo("#messages");
+			$.ajax({
+				url: '/interact',
+				method: 'POST',
+				data: $('#form').serialize(),
+				success: function(result) {
+					JSON.parse(result).messages.forEach(function(msg) {
+						$("<li></li>").text(msg).appendTo("#messages");
+					});
+				}
+			})
+			$("#form input[name=query]").val("");
+			return false;
+		})
+	})
+	</script>
+</head>
+<body>
+	<h1>astro-bot</h1>
+	<ol id='messages'>
+
+	</ol>
+	<form id='form'>
+		<input name='query' placeholder='Ask something...' />
+		<input type='submit' />
+	</form>
+</body>
+</html>
