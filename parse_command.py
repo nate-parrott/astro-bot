@@ -1,0 +1,43 @@
+from wise import Phrase, parse_phrase
+
+examples = [
+	Phrase("url", [["*url", "google.com"]]),
+	Phrase("url", ["load", ["*url", "google.com"]]),
+	Phrase("url", ["open", ["*url", "google.com"]]),
+	Phrase("url", ["fetch", ["*url", "google.com"]]),
+	Phrase("url", ["go to", ["*url", "google.com"]]),
+	Phrase("url", ["show", ["*url", "google.com"]]),
+	Phrase("search", ["search", ["~query", "hacker school"]]),
+	Phrase("search", ["google", ["~query", "weather 11215"]]),
+	Phrase("search", ["search", ["search_source/wikipedia", "wikipedia"], "for", ["~query", "praying mantis"]]),
+	Phrase("search", ["search", ["search_source/this_site", "this site"], "for", ["~query", "contact us"]]),
+	Phrase("search", ["find", ["~query", "support"], "on", ["search_source/this_site", "this site"]]),
+	Phrase("search", [["~query", "barack obama"]]),
+	Phrase("more_text", ["more"]),
+	Phrase("more_text", [["*number", "2"], "more pages"]),
+	Phrase("more_text", [["*number", "3"], "more pages"]),
+	Phrase("more_text", ["next"]),
+	Phrase("more_text", ["next", ["*number", "4"]]),
+	Phrase("navigate", ["click", ["*number", "6"]]),
+	Phrase("navigate", [["*number", "7"]]),
+	Phrase("navigate", [["*number", "7"]]),
+	Phrase("navigate", [["*number", "7"]]),
+	Phrase("navigate", ["click link", ["target", "hvuiehguo"]]),
+	Phrase("navigate", ["click", ["target", "ihenigo"], ["on_last_page", "on last page"]]),
+	Phrase("navigate", ["load", ["target", "jegotghr"], ["on_last_page", "from previous page"]]),
+	Phrase("show_navigation", ["show navigation"]),
+	Phrase("help", ["help me"]),
+	Phrase("help", ["what are the options"]),
+	Phrase("help", ["what can I say?"]),
+	Phrase("summarize", ["summarize this page"]),
+	Phrase("summarize", ["summarize", ["*number", "2"]]),
+	Phrase("show summary for", ["*number", "3"]),
+	Phrase("back", ["back"])
+]
+regexes = {
+"url": r"[a-zA-Z0-9_\-\.]+\.[a-z]+(\/[^ ]*)?",
+"number": r"\-?[0-9]+(\.[0-9]+)?"
+}
+
+def parse_command(command_text):
+	return parse_phrase(command_text, examples, regexes)

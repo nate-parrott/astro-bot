@@ -17,10 +17,8 @@ class ProbabilityCounter(object):
 	def iteritems(self):
 		return ((item, count * 1.0 / self.total) for (item, count) in self.counts.iteritems())
 
-print "RESTART WISE"
-
-SMOOTHING = 0.00001
-FREE_TEXT_PROB = 0.001
+SMOOTHING = 0.000001
+FREE_TEXT_PROB = 0.0001
 
 def smooth_log_prob(p):
 	return math.log((p+SMOOTHING) * (1 - SMOOTHING))

@@ -18,18 +18,21 @@ import webapp2
 import uuid
 import os
 import base64
-import json
+import pickle
 from google.appengine.ext import ndb
 import browse
 from xml.sax import saxutils
+import json
 
 class State(ndb.Model):
-	json = ndb.TextProperty()
+	pickled = ndb.BlobProperty(compressed=True)
 
 def interact(query, stateid):
-	state = State.get_or_insert(stateid, json="{}")
-	messages, new_state = browse.interact(query, json.loads(state.json))
-	state.json = json.dumps(new_state)
+	state = State.get_or_insert(stateid)
+	unpickled_state = pickle.loads(state.pickled) if state.pickled else {}
+	messages = browse.interact(query, unpickled_state)
+	print "MESSAGES", messages
+	state.pickled = pickle.dumps(unpickled_state)
 	state.put()
 	return messages
 
