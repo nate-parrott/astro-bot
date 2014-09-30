@@ -9,7 +9,11 @@ examples = [
 	Phrase("url", ["show", ["*url", "google.com"]]),
 	Phrase("search", ["search", ["~query", "hacker school"]]),
 	Phrase("search", ["google", ["~query", "weather 11215"]]),
+	Phrase("search", ["search the web for", ["~query", "kanye west"]]),
+	Phrase("search", ["search for", ["~query", "hello world"]]),
 	Phrase("search", ["search", ["search_source/wikipedia", "wikipedia"], "for", ["~query", "praying mantis"]]),
+	Phrase("search", [["search_source/wikipedia", "wikipedia"], ["~query", "android"]]),
+	Phrase("search", [["search_source/wikipedia", "show me the wikipedia article for"], ["~query", "the grateful dead"]]),
 	Phrase("search", ["search", ["search_source/this_site", "this site"], "for", ["~query", "contact us"]]),
 	Phrase("search", ["find", ["~query", "support"], "on", ["search_source/this_site", "this site"]]),
 	Phrase("search", [["~query", "barack obama"]]),
@@ -32,7 +36,10 @@ examples = [
 	Phrase("summarize", ["summarize this page"]),
 	Phrase("summarize", ["summarize", ["*number", "2"]]),
 	Phrase("show summary for", ["*number", "3"]),
-	Phrase("back", ["back"])
+	Phrase("back", ["back"]),
+	Phrase("whereami", ["where am i?"]),
+	Phrase("whereami", ["what page am i on?"]),
+	Phrase("whereami", ["current site"])
 ]
 regexes = {
 "url": r"[a-zA-Z0-9_\-\.]+\.[a-z]+(\/[^ ]*)?",

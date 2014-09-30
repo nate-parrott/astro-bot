@@ -10,15 +10,21 @@ def normalize_url(url):
 		url = 'http://' + url
 	return url
 
-def get_html(url):
+def get_content(url):
 	url = "http://instapaper.com/m?u=" + urllib.quote_plus(url)
 	html = urllib2.urlopen(url).read()
-	story = bs4.BeautifulSoup(html).find(id='story')
-	return unicode(story)
+	soup = bs4.BeautifulSoup(html)
+	story = soup.find(id='story')
+	return unicode(story), soup.title.get_text()
+
+NO_URL = ""
 
 class Document(object):
-	def __init__(self, url):
-		soup = bs4.BeautifulSoup(get_html(normalize_url(url)))
+	def __init__(self, url=None, html=None):
+		self.url = url
+		if url:
+			html, self.title = get_content(normalize_url(url))
+		soup = bs4.BeautifulSoup(html)
 		self.text = u""
 		self.links = []
 		self.headers = []
@@ -64,6 +70,10 @@ class Frame(object):
 class BrowserState(object):
 	def __init__(self):
 		self.frame_stack = []
+
+	def clean_up(self):
+		while len(self.frame_stack) > 5:
+			self.frame_stack = self.frame_stack[1:]
 
 	def navigate_to_url(self, url):
 		self.frame_stack.append(Frame(Document(url)))
