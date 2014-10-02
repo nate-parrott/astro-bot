@@ -22,6 +22,8 @@ def interact(query, state):
 	elif parsed.intent == 'more_text':
 		return bstate.get_n_messages(min(7, int(parsed.get('*number', '1'))))
 	elif parsed.intent == 'navigate' and parsed.get('*number', None):
+		if parsed.get('on_last_page', False):
+			bstate.back()
 		url = bstate.frame_stack[-1].document.links[int(parsed.get('*number', '0'))-1]
 		bstate.navigate_to_url(url)
 		return bstate.get_n_messages(1)

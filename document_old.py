@@ -1,7 +1,6 @@
 import urllib, urllib2
 import bs4
 from txtfy import txtfy
-from html2text import html2doc
 
 SMS_LEN = 160
 
@@ -28,12 +27,46 @@ NO_URL = ""
 class Document(object):
 	def __init__(self, url=None, html=None):
 		self.url = url
-		url = normalize_url(url)
 		if url:
-			html, self.title = get_content(url)
-		if not isinstance(html, unicode):
-			html = html.decode('utf-8')
-		self.text, self.links = html2doc(html, baseurl = url if url else None)
+			html, self.title = get_content(normalize_url(url))
+		soup = bs4.BeautifulSoup(html)
+		self.text = u""
+		self.links = []
+		self.headers = []
+		ignore_tags = set(['head', 'script', 'style'])
+		def break_line():
+			if len(self.text) > 0 and self.text[-1] != '\n':
+				self.text += '\n'
+		def break_word():
+			if len(self.text) > 0 and self.text[-1] not in " \n":
+				self.text += " "
+		def emit_text(t):
+			break_word()
+			self.text += txtfy(t)
+		def traverse(tag):
+			if tag.name == 'a' and tag.has_attr('href'):
+				self.links.append(tag['href'])
+				emit_text(u'[{0}]({1}) '.format(tag.get_text(), len(self.links)))
+			elif tag.name in ['h1', 'h2', 'h3', 'h4']:
+				break_line()
+				self.headers.append((tag.get_text(), len(self.text)))
+				process_contents(tag)
+				break_line()
+			elif tag.name in ['li', 'p']:
+				break_line()
+				process_contents(tag)
+				break_line()
+			else:
+				process_contents(tag)
+		def process_contents(tag):
+			for child in tag.contents:
+				if isinstance(child, bs4.NavigableString):
+					emit_text(unicode(child))
+				elif hasattr(child, 'name'):
+					traverse(child)
+		traverse(soup)
+		break_line()
+		emit_text("<end of page>")
 
 class Frame(object):
 	def __init__(self, doc):

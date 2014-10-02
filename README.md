@@ -41,3 +41,8 @@
 
 `Astrobot` is a Google Appengine app that supports responding to incoming messages from Twilio. You can use a live version at [astro-bot.appspot.com](http://astro-bot.appspot.com) or by texting _646-576-7688_ .
 
+## Running your own
+Download the Google Appengine launcher and just drag the repository folder into it.
+
+You've also got to **create a file called secrets.py**, which includes a variable `BING_API_KEY`, holding your Bing search API key (*not* a Simple Search API key—the full API key). You can get these for free. You'll need it for web search — otherwise, leave secrets.txt empty and it'll all work *except* web search.
+

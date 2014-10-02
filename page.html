@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Astrobot: browse the web with pure SMS</title>
 	<script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 	<script>
 	$(document).ready(function() {
@@ -12,6 +13,7 @@
 				data: $('#form').serialize(),
 				success: function(result) {
 					JSON.parse(result).messages.forEach(function(msg) {
+						console.log(msg)
 						$("<li></li>").text(msg).appendTo("#messages");
 					});
 				}
@@ -22,17 +24,45 @@
 	})
 	</script>
 	<style>
-	#messages li:before {
-		content: "Astro-bot:";
+	body {
+		margin: 20px;
+		font-family: sans-serif;
+		max-width: 600px;
+		width: 90%;
+		margin: auto;
+		text-align: center;
+		padding-bottom: 2em;
 	}
-	#messages li.sent:before {
-		content: "You:";
+	#messages {
+		list-style-type: none;
+		padding: 0px;
+	}
+	#messages li {
+		white-space: pre-wrap;
+		padding: 15px;
+		border-radius: 10px;
+		color: white;
+		background-color: #1882ff;
+		margin: 20px;
+		text-align: left;
+	}
+	#messages li.sent {
+		color: black;
+		background-color: #dbd9e1;
+		text-align: right;
+	}
+	#form {
+		display: inline-block;
 	}
 	</style>
 </head>
 <body>
+<a href='http://github.com/nate-parrott/astro-bot' alt='Fork me on GitHub'><img style='display: block; position: absolute; top: 0px; right: 0px; width: 149px' src='http://aral.github.io/fork-me-on-github-retina-ribbons/right-turquoise@2x.png'/></a>
+
 	<h1>astro-bot</h1>
-	<h3>Text <strong>646-576-7688</strong></h3>
+	<p>Browse the web over sms. Text <strong>646-576-7688</strong>.</p>
+	<p>Text a web search, or commands like "hackerschool.com", "more 3 [texts of content]", "5" [to navigate to the link labelled with the number 5], "back", "search the web for kanye west," "find me the wikipedia article for Scotland," etc. Work in progress.</p>
+	<p><em>or try it below...</em></p>
 	<ol id='messages'>
 
 	</ol>
