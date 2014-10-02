@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from txtfy import txtfy
 
 try:
     True
@@ -716,7 +717,9 @@ class HTML2Text(HTMLParser.HTMLParser):
 
 
     def optwrap(self, text):
-        """Wrap all paragraphs in the provided text."""
+        return txtfy(text)
+        
+        """Wrap all paragraphs in the provided text."""        
         if not self.body_width:
             return text
 

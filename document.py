@@ -27,13 +27,12 @@ NO_URL = ""
 
 class Document(object):
 	def __init__(self, url=None, html=None):
-		self.url = url
-		url = normalize_url(url)
 		if url:
+			url = normalize_url(url)
 			html, self.title = get_content(url)
 		if not isinstance(html, unicode):
 			html = html.decode('utf-8')
-		self.text, self.links = html2doc(html, baseurl = url if url else None)
+		self.text, self.links = html2doc(html, baseurl = url if url else "")
 
 class Frame(object):
 	def __init__(self, doc):
@@ -59,17 +58,26 @@ class BrowserState(object):
 		self.frame_stack[-1].offset = max(0, self.frame_stack[-1].offset - SMS_LEN)
 		return self.get_n_messages(1)
 
-	def get_n_messages(self, n):
-		if self.frame_stack[-1].offset >= len(self.frame_stack[-1].document.text):
+	def get_n_messages(self, n, backwards=False):
+		if backwards:
+			self.frame_stack[-1].offset = max(0, self.frame_stack[-1].offset - 160)
+
+		if not backwards and self.frame_stack[-1].offset >= len(self.frame_stack[-1].document.text):
 			return ["<end of page>"]
 		else:
 			messages = []
 			for i in xrange(n):
 				start_offset = self.frame_stack[-1].offset
+				if backwards:
+					start_offset = max(0, start_offset-160)
 				end_offset = min(len(self.frame_stack[-1].document.text), start_offset + SMS_LEN)
 				if end_offset - start_offset == 0:
 					break
 				messages.append(self.frame_stack[-1].document.text[start_offset : end_offset])
-				self.frame_stack[-1].offset = end_offset
-			return messages
+				self.frame_stack[-1].offset = start_offset if backwards else end_offset
+				if self.frame_stack[-1].offset == 0:
+					break
+		if backwards:
+			self.frame_stack[-1].offset = min(len(self.frame_stack[-1].document.text), self.frame_stack[-1].offset + 160)
+		return messages
 

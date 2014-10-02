@@ -8,7 +8,7 @@ import secrets
 def document_from_query(query):
 	query_dict = {"$format": "json", "Query": "'{0}'".format(query)}
 	url = "https://api.datamarket.azure.com/Bing/Search/Web?" + urlencode(query_dict)
-	auth_string = b64encode("{0}:{0}".format(BING_API_KEY))
+	auth_string = b64encode("{0}:{0}".format(secrets.BING_API_KEY))
 	headers = {"Authorization": "Basic " + auth_string}
 	response, content = Http().request(url, "GET", headers=headers)
 	results = json.loads(content)['d']['results']

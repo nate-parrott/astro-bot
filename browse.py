@@ -19,8 +19,11 @@ def interact(query, state):
 	if parsed.intent == 'url':
 		bstate.navigate_to_url(parsed.get("*url", None))
 		return bstate.get_n_messages(1)
-	elif parsed.intent == 'more_text':
-		return bstate.get_n_messages(min(7, int(parsed.get('*number', '1'))))
+	elif parsed.intent in ('more_text', 'previous_text'):
+		return bstate.get_n_messages(min(7, int(parsed.get('*number', '1'))), backwards=(parsed.intent=='previous_text'))
+	elif parsed.intent == 'back_to_top':
+		bstate.frame_stack[-1].offset = 0
+		return bstate.get_n_messages(1)
 	elif parsed.intent == 'navigate' and parsed.get('*number', None):
 		if parsed.get('on_last_page', False):
 			bstate.back()
