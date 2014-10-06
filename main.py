@@ -65,8 +65,13 @@ class Twilio(webapp2.RequestHandler):
 		self.response.write("</Response>")
 
 
+class InstructionsHandler(webapp2.RequestHandler):
+	def get(self):
+		self.response.write(open('instructions.html').read()) 
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
+    ('/instructions', InstructionsHandler),
     ('/interact', Interact),
     ('/twilio', Twilio)
 ], debug=True)

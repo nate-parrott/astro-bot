@@ -31,10 +31,15 @@ def interact(query, state):
 		bstate.navigate_to_url(url)
 		return bstate.get_n_messages(1)
 	elif parsed.intent == 'help':
-		return ['Try these: "Go to hackerschool.com", "search wikipedia for Azerbaijan". On a web page, type "2 more" to see more or text the # of a link to click it.']
+		bstate.navigate_to_url('http://astro-bot.appspot.com/instructions')
+		return bstate.get_n_messages(1)
+		# return ['Try these: "Go to hackerschool.com", "search wikipedia for Azerbaijan". On a web page, type "2 more" to see more or text the # of a link to click it.']
 	elif parsed.intent == 'back':
 		bstate.back()
 		return bstate.resend_current_place()
+	elif parsed.intent == 'contents':
+		bstate.go_to_contents()
+		return bstate.get_n_messages(1)
 	elif parsed.intent == 'search':
 		query = parsed.get("~query", "")
 		if parsed.get('search_source/wikipedia', False):
@@ -48,6 +53,8 @@ def interact(query, state):
 		if bstate.frame_stack == []:
 			return ["You haven't loaded any page yet."]
 		else:
-			return [u'You\'re reading "{0}" ({1})'.format(bstate.frame_stack[-1].document.title, bstate.frame_stack[-1].document.url)]
+			url = bstate.frame_stack[-1].document.url
+			url_string = " ({0})".format(url) if url else ""
+			return [u'You\'re reading "{0}"{1}'.format(bstate.frame_stack[-1].document.title, url_string)]
 	else:
 		return ["What's that? I don't understand. Say 'help me' for help."]

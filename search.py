@@ -12,6 +12,6 @@ def document_from_query(query):
 	headers = {"Authorization": "Basic " + auth_string}
 	response, content = Http().request(url, "GET", headers=headers)
 	results = json.loads(content)['d']['results']
-	html = u"<h1>Web search for '{0}'</h1>".format(query) + u"".join([u"<a href='{0}'>{1} ({2})</a>".format(r['Url'], r['Title'], r['DisplayUrl']) for r in results])
+	html = u"<h1>Web search for '{0}'</h1>".format(query) + u"<br/>".join([u"<a href='{0}'>{1} ({2})</a>".format(r['Url'], r['Title'], r['DisplayUrl']) for r in results])
 	doc = document.Document(html = html)
 	return doc

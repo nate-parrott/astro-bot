@@ -18,4 +18,4 @@ def txtfy_word(w):
 
 def txtfy(text):
 	tokens = text.split(" ")
-	return u" ".join(map(txtfy_word, tokens)).strip()
+	return u" ".join(map(txtfy_word, tokens))

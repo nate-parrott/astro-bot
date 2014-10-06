@@ -192,6 +192,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.emphasis_mark = '_'
         self.strong_mark = '**'
 
+        self.headers = [] # (text, offset) tuples
+
         if out is None:
             self.out = self.outtextf
         else:
@@ -228,6 +230,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.emphasis = 0
         self.drop_white_space = 0
         self.inheader = False
+        self.offset_of_current_header = -1
         self.abbr_title = None  # current abbreviation definition
         self.abbr_data = None  # last inner HTML (for abbr being defined)
         self.abbr_list = {}  # stack of abbreviations to write later
@@ -248,7 +251,13 @@ class HTML2Text(HTMLParser.HTMLParser):
         return self.optwrap(self.close())
 
     def outtextf(self, s):
+        s = txtfy(s)
         self.outtextlist.append(s)
+        if self.inheader:
+            if len(self.headers) and self.headers[-1][1] == self.offset_of_current_header:
+                self.headers[-1] = (self.headers[-1][0] + ' ' + s, self.offset_of_current_header)
+            else:
+                self.headers.append((s, self.offset_of_current_header))
         if s: self.lastWasNL = s[-1] == '\n'
 
     def close(self):
@@ -395,6 +404,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.p()
             if start:
                 self.inheader = True
+                self.offset_of_current_header = self.current_offset()
                 self.o(hn(tag)*"#" + ' ')
             else:
                 self.inheader = False
@@ -716,9 +726,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         return nest_count
 
 
+    def current_offset(self):
+        return sum(map(len, self.outtextlist))
+
     def optwrap(self, text):
-        return txtfy(text)
-        
         """Wrap all paragraphs in the provided text."""        
         if not self.body_width:
             return text
@@ -812,7 +823,7 @@ def html2doc(html, baseurl=''):
     text, link_info = h.handle(html), h.a
     links = [urlparse.urljoin(baseurl, l['href']) for l in link_info]
     print links
-    return (text, links)
+    return (text, links, h.headers)
 
 def unescape(s, unicode_snob=False):
     h = HTML2Text()

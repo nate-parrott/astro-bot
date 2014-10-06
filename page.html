@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Astrobot: browse the web with pure SMS</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no"/>
 	<script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 	<script>
 	$(document).ready(function() {
@@ -54,6 +55,29 @@
 	#form {
 		display: inline-block;
 	}
+	#commands {
+		padding: 0;
+		text-align: center;
+	}
+	#commands li {
+		display: inline-block;
+		padding: 10px;
+		list-style-type: none;
+		max-width: 40%
+	}
+	#commands li div:before {
+		content: "“";
+		font-size: large;
+	}
+	#commands li div:after {
+		content: "”";
+		font-size: large
+	}
+	#commands li span {
+		font-size: small;
+		display: block;
+		font-style: italic;
+	}
 	</style>
 </head>
 <body>
@@ -61,8 +85,15 @@
 
 	<h1>astro-bot</h1>
 	<p>Browse the web over sms. Text <strong>646-576-7688</strong>.</p>
-	<p>Text a web search, or commands like "hackerschool.com", "more 3 [texts of content]", "5" [to navigate to the link labelled with the number 5], "back", "search the web for kanye west," "find me the wikipedia article for Scotland," etc. Work in progress.</p>
-	<p><em>or try it below...</em></p>
+	<h4>Things you can say...</h4>
+	<ul id='commands'>
+		<li><div>go to hackerschool.com</div></li>
+		<li><div>2 more</div> <span>sends 2 more messages of content</span></li>
+		<li><div>4</div> <span>clicks the link named '4'</span></li>
+		<li><div>search the web for george harrison</div></li>
+		<li><div>where am i?</div> <span>shows your current URL</span></li>
+		<li><div>table of contents</div> <span>allows you to jump to specific headings on a page</span></li>
+	</ul>
 	<ol id='messages'>
 
 	</ol>

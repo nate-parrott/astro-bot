@@ -44,7 +44,10 @@ examples = [
 	Phrase("back", ["back"]),
 	Phrase("whereami", ["where am i?"]),
 	Phrase("whereami", ["what page am i on?"]),
-	Phrase("whereami", ["current site"])
+	Phrase("whereami", ["current site"]),
+	Phrase("contents", ["show me the table of contents"]),
+	Phrase("contents", ["zoom out"]),
+	Phrase("contents", ["list the headings on the page"])
 ]
 regexes = {
 "url": r"[a-zA-Z0-9_\-\.]+\.[a-z]+(\/[^ ]*)?",
